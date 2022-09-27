@@ -1,4 +1,5 @@
 import combinatorics.simple_graph.basic
+import tactic
 
 open finset
 universes u v w
@@ -37,31 +38,39 @@ Let's prove some simple lemmas about it!
 -- v is not adjacent to itself
 lemma irrefl' {v : V} : ¬G.adj v v := 
 begin
-  sorry,
+  exact G.loopless v,
 end
 
 -- If u is adjacent to v, then v is adjacent to u
 lemma adj_symm' (h : G.adj u v) : G.adj v u := 
 begin
-  sorry,
+  exact G.symm h,
 end
 
 -- This is just the same as the last lemma, but in an iff form
 lemma adj_comm' (u v : V) : G.adj u v ↔ G.adj v u := 
 begin
-  sorry,
+  split,
+  intro h,
+  exact G.symm h,
+  intro h,
+  exact G.symm h,
 end
 
 -- If two vertices are adjacent, then they're not equal
 lemma ne_of_adj' (h : G.adj a b) : a ≠ b :=
 begin
-  sorry,
+  rintro rfl,
+  exact G.irrefl h,
+
 end
 
 -- if v is adjacent to x and w is not adjacent to x, then v ≠ w
 lemma ne_of_adj_of_not_adj' {v w x : V} (h : G.adj v x) (hn : ¬ G.adj w x) : v ≠ w :=
 begin
-  sorry,
+  rintro rfl,
+  apply hn,
+  exact h,
 end
 
 /-!
@@ -69,26 +78,32 @@ See if you can complete the definitions of the complete graph and the empty grap
 -/
 
 def complete_graph' (V : Type u) : simple_graph V := { 
-  adj := ne, -- `ne` is "not equal", so the relation is that a pair of vertices
+  adj := ne, --  is "not equal", so the relation is that a pair of vertices
               -- is adjacent if they're not equal
   symm := 
     begin
-      sorry,
-    end
+      intros v w h h',
+      apply h,
+      exact eq.symm h',
+    end,
   loopless :=
     begin
-      sorry,
+      intros v nv,
+      apply nv,
+      refl,
     end }
 
 def empty_graph' (V : Type u) : simple_graph V := { 
   adj := λ i j, false, -- in other words, for every pair of vertices, adjacency between them is "false"
   symm := 
     begin
-      sorry,
-    end
+      intros v y h,
+      exact h,
+    end,
   loopless :=
     begin
-      sorry,
+     intros v h,
+     exact h,
     end }
 
 /-!
@@ -107,12 +122,23 @@ instance : has_compl (simple_graph V) := ⟨λ G,
                                       -- creating loops in our definition.
     symm := 
       begin
-        sorry,
-      end
+        intros v w,
+        intro h,
+        split,
+        cases h,
+        exact ne.symm h_left,
+        cases h,
+        intro a,
+        rw adj_comm' at a,
+        apply h_right,
+        exact a,
+      end,
     loopless := 
       begin
+        intros v h,
         sorry,
-      end }⟩
+      end
+      }⟩
 
 
 /-!
@@ -133,7 +159,14 @@ corresponding element in the edge set of G! (Hint: I've included some helper lem
 lemma adj_iff_exists_edge' {v w : V} :
   G.adj v w ↔ v ≠ w ∧ ∃ (e ∈ G.edge_set), v ∈ e ∧ w ∈ e :=
 begin
-  sorry,
+  split,
+  intro h,
+  split,
+  {exact G.ne_of_adj h,},
+  {sorry,},
+  {sorry,},
+
+
 end
 
 /-!
@@ -143,11 +176,14 @@ Now we're gonna look at some basic definitions we need to talk about properties 
 def neighbor_set (v : V) : set V := set_of (G.adj v)
 ```
 -/
-
 -- a vertex w is in the neighbor set of vertex v iff v and w are adjacent
 lemma mem_neighbor_set' (v w : V) : w ∈ G.neighbor_set v ↔ G.adj v w :=
 begin
-  sorry,
+  split,
+  intro w',
+  exact w',
+  intro h,
+  exact h,
 end
 
 /-!
@@ -159,23 +195,25 @@ def incidence_set (v : V) : set (sym2 V) := {e ∈ G.edge_set | v ∈ e}
 -- the incidence set of a vertex is a subset of the graph's edge set
 lemma incidence_set_subset' (v : V) : G.incidence_set v ⊆ G.edge_set :=
 begin
-  sorry,
+  intros _ h,
+  exact h.1,
 end
 
 -- an edge vw is in the incidence set of v iff v and w are adjacent
 lemma mk_mem_incidence_set_left_iff' : ⟦(v, w)⟧ ∈ G.incidence_set v ↔ G.adj v w :=
 begin
-  sorry,
+  apply and_iff_left,
+  exact sym2.mem_mk_left _ _,
 end
-
 -- an edge vw is in the incidence set of w iff v and w are adjacent
 lemma mk_mem_incidence_set_right_iff' : ⟦(v, w)⟧ ∈ G.incidence_set w ↔ G.adj v w :=
 begin
-  sorry,
+  apply and_iff_left,
+  exact sym2.mem_mk_right _ _,
 end
 
 -- an edge vw is in the incidence set of v iff w is in the neighbor set of v
 lemma mem_incidence_iff_neighbor' {v w : V} : ⟦(v, w)⟧ ∈ G.incidence_set v ↔ w ∈ G.neighbor_set v :=
 begin
-  sorry,
+  simp,
 end
