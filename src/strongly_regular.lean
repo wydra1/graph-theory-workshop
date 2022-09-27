@@ -57,17 +57,21 @@ lemma bot_strongly_regular :
 { card := rfl, -- it's just an easy rfl here
   regular :=
     begin
-      intro grph,
-      
+      exact bot_degree,
     end,
   of_adj :=
     begin
-      sorry,
+      intros v w h,
+      exact h.elim,
     end,
   of_not_adj :=
     begin
-      sorry,
-    end }
+      intros v w h,
+      simp,
+      ext,
+      simp,
+      intro no,
+    end}
 
 /-- Complete graphs are strongly regular. Note that `μ` can take any value
   for complete graphs, since there are no distinct pairs of non-adjacent vertices. -/
@@ -76,11 +80,11 @@ lemma is_SRG_with.top :
 { card := rfl,
   regular :=
     begin
-      sorry,
+      exact is_regular_of_degree.top,
     end,
   of_adj :=
     begin
-      sorry,
+
     end,
   of_not_adj :=
     begin

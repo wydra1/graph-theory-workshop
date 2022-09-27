@@ -163,8 +163,16 @@ begin
   intro h,
   split,
   {exact G.ne_of_adj h,},
-  {sorry,},
-  {sorry,},
+  {use ⟦(v, w)⟧,
+  split,
+  apply h,
+  simp,
+  },
+  {rintro ⟨nvw, e, he, hvw⟩,
+  rw sym2.mem_and_mem_iff nvw at hvw,
+  subst e,
+  exact he,
+  },
 
 
 end
