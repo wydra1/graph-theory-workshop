@@ -57,7 +57,8 @@ lemma bot_strongly_regular :
 { card := rfl, -- it's just an easy rfl here
   regular :=
     begin
-      sorry,
+      intro grph,
+      
     end,
   of_adj :=
     begin
