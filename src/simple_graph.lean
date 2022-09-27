@@ -217,3 +217,5 @@ lemma mem_incidence_iff_neighbor' {v w : V} : ⟦(v, w)⟧ ∈ G.incidence_set v
 begin
   simp,
 end
+
+end simple_graph
