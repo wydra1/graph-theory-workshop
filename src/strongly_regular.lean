@@ -36,7 +36,7 @@ variables (G : simple_graph V) [decidable_rel G.adj]
 /--
 A graph is strongly regular with parameters `n k ℓ μ` if
  * its vertex set has cardinality `n`
- * it is regular with degree `k`
+ * it is regular with degree `k`s
  * every pair of adjacent vertices has `ℓ` common neighbors
  * every pair of nonadjacent vertices has `μ` common neighbors
 -/
@@ -96,7 +96,7 @@ lemma is_SRG_with.top :
     begin
       intros v w h h',
       simp,
-      sorry,
+      
     end }
 
 

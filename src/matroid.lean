@@ -1,5 +1,5 @@
-import data.finset
-import .simple_graph.basic
+import combinatorics.simple_graph.basic
+import data.finite
 
 universes u
 
@@ -39,9 +39,12 @@ def dependent_sets : finset (finset α) := filter (λ s, ¬ M.ℐ s) univ.powers
 -- (C1)
 lemma empty_not_dependent : ∅ ∉ M.dependent_sets :=
 begin
-  sorry,
+  have h: M.ℐ ∅, exact M.empty,
+  have h': ∅ ∉ M.dependent_sets,
+  {by_contra,
+  },
+  exact h',
 end
-
 variables [decidable_pred (λ (D : finset α), can_exchange (λ (_x : finset α), _x ∈ D.powerset.erase D))]
 
 def circuit : finset (finset α) :=
@@ -52,7 +55,15 @@ def circuit : finset (finset α) :=
 lemma mem_circuit (C₁ : finset α) :
   C₁ ∈ M.circuit ↔ C₁ ∈ M.dependent_sets ∧ (∀ (C₂ ∈ (erase C₁.powerset C₁)), M.ℐ C₂) :=
 begin
-  sorry,
+  simp,
+  split,
+  {intro h,
+  split,
+  {sorry,},
+  {intro C₂,
+  intros h h',
+  sorry,},},
+  {sorry,}
 end
 
 /- `(C2)` if C₁ and C₂ are members of C and C₁ ⊆ C₂, then C₂ = C₂.
@@ -61,7 +72,6 @@ lemma circuit_antichain (C₁ C₂ : finset α) (h₁ : C₁ ∈ M.circuit) (h�
 begin
   sorry,
 end
-
 /- `(C3)` If C₁ and C₂ are distinct members of M.circuit and e ∈ C₁ ∩ C₂, then
 there is a member C₃ of M.circuit such that C₃ ⊆ (C₁ ∪ C₂) - e.   -/
 lemma circuit_dependence (C₁ C₂ : finset α) (h₁ : C₁ ∈ M.circuit) (h₂ : C₂ ∈ M.circuit) (h : C₁ ≠ C₂) (e : α) :
