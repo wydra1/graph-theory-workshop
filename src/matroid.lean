@@ -40,10 +40,9 @@ def dependent_sets : finset (finset α) := filter (λ s, ¬ M.ℐ s) univ.powers
 lemma empty_not_dependent : ∅ ∉ M.dependent_sets :=
 begin
   have h: M.ℐ ∅, exact M.empty,
-  have h': ∅ ∉ M.dependent_sets,
-  {by_contra,
-  },
-  exact h',
+  intro h',
+  have h'': ∅ ∈ univ.powerset ∧ ¬ M.ℐ ∅ ,
+  sorry,
 end
 variables [decidable_pred (λ (D : finset α), can_exchange (λ (_x : finset α), _x ∈ D.powerset.erase D))]
 
@@ -59,11 +58,14 @@ begin
   split,
   {intro h,
   split,
-  {sorry,},
+  {exact finset.mem_of_mem_filter C₁ h,},
   {intro C₂,
-  intros h h',
-  sorry,},},
-  {sorry,}
+  intros g g',
+  have C₁_dep : C₁∈ M.dependent_sets, exact finset.mem_of_mem_filter C₁ h,},
+  },
+  {intro h,
+  cases h with h₁ h₂,
+  sorry,}
 end
 
 /- `(C2)` if C₁ and C₂ are members of C and C₁ ⊆ C₂, then C₂ = C₂.
