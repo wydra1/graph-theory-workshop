@@ -70,7 +70,7 @@ lemma bot_strongly_regular :
       simp,
       ext,
       simp,
-      intro no,
+      simp [mem_common_neighbors],
     end}
 
 /-- Complete graphs are strongly regular. Note that `μ` can take any value
@@ -84,13 +84,31 @@ lemma is_SRG_with.top :
     end,
   of_adj :=
     begin
-
+      intros v w h,
+      simp [common_neighbors_top_eq, ← set.to_finset_card, set.to_finset_diff],
+      rw finset.card_sdiff,
+      have h' : v ≠ w,
+      {exact ne_of_adj ⊤ h},
+      {simp [finset.card_univ, h'],},
+      {simp,}
     end,
   of_not_adj :=
     begin
+      intros v w h h',
+      simp,
       sorry,
     end }
 
+
+
+lemma card_common_neighbors_top' [decidable_eq V] {v w : V} (h : v ≠ w) :
+  fintype.card ((⊤ : simple_graph V).common_neighbors v w) = fintype.card V - 2 :=
+begin
+  simp only [common_neighbors_top_eq, ← set.to_finset_card, set.to_finset_diff],
+  rw finset.card_sdiff,
+  { simp [finset.card_univ, h], },
+  { simp only [set.to_finset_subset, set.subset_univ] },
+end
 /-!
 The unfortunate thing with talking about cardinalities of things like neighbor sets of vertices
 is you'll run into finset or fintype issues where Lean isn't sure about the type equality of

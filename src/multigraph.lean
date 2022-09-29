@@ -59,19 +59,20 @@ def reverse_dart (G : graph V E) (d : G.dart) : G.dart :=
   e := d.e,
   h :=
     begin
-      sorry,
+      rw d.h,
+      simp [adj_symm],
     end }
 
 @[simp]
 lemma reverse_head_tail (G : graph V E) (d : G.dart) : (G.reverse_dart d).tail = d.head :=
 begin
-  sorry,
+  refl,
 end
 
 @[simp]
 lemma reverse_tail_head (G : graph V E) (d : G.dart) : (G.reverse_dart d).head = d.tail :=
 begin
-  sorry,
+  refl,
 end
 
 end basic
@@ -97,14 +98,18 @@ lemma walk_rev_head (p : walk G) :
   list.map dart.head (list.map G.reverse_dart p.darts) =
     (list.map dart.tail p.darts) :=
 begin
-  sorry,
+  simp,
+  have h: dart.head ∘ G.reverse_dart = dart.tail,
+  {sorry,},
+  refl,
+
 end
 
 lemma walk_rev_tail (p : walk G) :
   list.map dart.tail (list.map G.reverse_dart p.darts) =
     (list.map dart.head p.darts) :=
 begin
-  sorry,
+  sory,
 end
 
 /-!
@@ -113,8 +118,8 @@ the empty walk! Hint: By our definition, we do need a start and end vertex, so
 we have to use arbitrary vertex v.
 -/
 def empty_walk (v : V) : walk G :=
-{ head := sorry,
-  tail := sorry,
+{ head := v,
+  tail := v,
   darts := sorry,
   is_walk := sorry }
 
@@ -122,13 +127,13 @@ def empty_walk (v : V) : walk G :=
 The reverse of a walk p.
 -/
 def reverse (p : walk G) : walk G :=
-{ head := sorry,
-  tail := sorry,
+{ head := p.tail,
+  tail := p.head,
   darts := (list.map G.reverse_dart p.darts.reverse),
   -- including the above because you probably haven't seen lists in lean yet (?)
   is_walk :=
     begin
-      sorry,
+      
     end }
 
 /-!
